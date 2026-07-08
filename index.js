@@ -257,7 +257,6 @@ function scrambleText(el, finalText, duration = 600) {
   const phrases = [
     "the human mind.",
     "mental health research.",
-    "medicine.",
     "how memory works.",
     "helping people.",
   ];
@@ -364,9 +363,9 @@ function runTerminal() {
   const lines = [
     { html: '<span class="t-green">$</span> whoami', type: true },
     { html: '<span class="t-blue">joseph_al_fartosy</span> — psych major, cs minor', type: false },
-    { html: '<span class="t-green">$</span> cat goal.txt', type: true },
-    { html: '<span class="t-yellow">medicine — one step at a time ●</span>', type: false },
-    { html: '<span class="t-green">$</span> ./study_for_the_mcat.sh', type: true },
+    { html: '<span class="t-green">$</span> cat focus.txt', type: true },
+    { html: '<span class="t-yellow">mental health &amp; how the mind works ●</span>', type: false },
+    { html: '<span class="t-green">$</span> ./keep_researching.sh', type: true },
   ];
   if (prefersReducedMotion) {
     code.innerHTML = lines.map((l) => l.html).join("\n") + "\n";
