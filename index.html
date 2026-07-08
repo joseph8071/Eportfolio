@@ -1,350 +1,486 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Joseph</title>
-    <link rel="stylesheet" href="style.css" />
-    <script
-      src="https://kit.fontawesome.com/c8e4d183c2.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="./index.js"></script>
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
-  </script>
-  <script type="text/javascript">
-   (function(){
-      emailjs.init("vWQOkn-EPhDyMs0tS");
-   })();
-</script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Joseph Al Fartosy — Psychology · Research · Pre-Med</title>
+  <meta name="description" content="Joseph Al Fartosy — psychology student and researcher at the University of Alberta." />
+  <meta property="og:title" content="Joseph Al Fartosy — Psychology · Research · Pre-Med" />
+  <meta property="og:description" content="Psychology student and researcher at the University of Alberta." />
+  <link rel="icon" href="./assets/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>(function(){ emailjs.init("vWQOkn-EPhDyMs0tS"); })();</script>
+</head>
+<body>
 
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__center">
+      <div class="preloader__name" id="preloaderName" aria-hidden="true"></div>
+      <div class="preloader__row">
+        <span class="preloader__label">loading</span>
+        <span class="preloader__pct" id="preloaderPct">0%</span>
+      </div>
+      <div class="preloader__bar"><div class="preloader__bar-fill" id="preloaderFill"></div></div>
+    </div>
+    <div class="preloader__curtain preloader__curtain--l"></div>
+    <div class="preloader__curtain preloader__curtain--r"></div>
+  </div>
 
-  <body>
-    <section id="landing-page" onmousemove="moveBackground(event)">
-      <nav>
-        <figure>
-          <img id="personal-logo" src="./assets/JAlogo.svg" alt="" />
-        </figure>
-        <ul class="nav__link--list">
-          <li class="nav__link" onclick="toggleModal()">
-            <a
-              href="#"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
-              >About</a
-            >
-          </li>
-          <li class="nav__link">
-            <a
-              href="#projects"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
-              >Projects</a
-            >
-          </li>
-          <li class="nav__link" onclick="toggleModal()">
-            <a
-              href="#"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
-              >Contact</a
-            >
-          </li>
-          <li class="nav__link click">
-            <a
-              href="#"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
-              ><i class="fas fa-adjust" onclick="toggleContrast()"></i
-            ></a>
-          </li>
-        </ul>
-      </nav>
-      <header class="header">
-        <div class="header__content">
-          <h1 class="title">Hey</h1>
-          <h1 class="title blue">I'm Joseph.</h1>
-          <p class="header__para">
-            I'm a <b class="blue">Fullstack Software Engineer</b> with a passion
-            for building & designing applications while having exceptional
-            digital user experiences. With a passion for problem-solving, I design and code effective solutions from the ground up.
-            <br />
-            Here's a bit more <b class="blue click" onclick="toggleModal()">about me.</b>
+  <!-- Custom cursor -->
+  <div class="cursor" id="cursor"><span class="cursor__label" id="cursorLabel"></span></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- Layered particle field (a little constellation of neurons) -->
+  <canvas id="bg-canvas"></canvas>
+  <!-- Confetti / party layer -->
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- Ambient parallax orbs -->
+  <div class="orbs" aria-hidden="true">
+    <div class="orb orb--1" data-speed="0.25"></div>
+    <div class="orb orb--2" data-speed="0.45"></div>
+    <div class="orb orb--3" data-speed="0.15"></div>
+  </div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Nav -->
+  <nav class="nav" id="nav">
+    <a href="#top" class="nav__logo" id="logo" data-magnetic data-scramble>JA<span class="nav__logo-dot">.</span></a>
+    <ul class="nav__links">
+      <li><a href="#about" class="nav__link" data-section="about" data-scramble><span class="nav__link-num">01</span> <span class="scramble-target">About</span></a></li>
+      <li><a href="#research" class="nav__link" data-section="research" data-scramble><span class="nav__link-num">02</span> <span class="scramble-target">Research</span></a></li>
+      <li><a href="#software" class="nav__link" data-section="software" data-scramble><span class="nav__link-num">03</span> <span class="scramble-target">Software</span></a></li>
+      <li><a href="#contact" class="nav__link" data-section="contact" data-scramble><span class="nav__link-num">04</span> <span class="scramble-target">Contact</span></a></li>
+    </ul>
+    <div class="nav__right">
+      <button class="nav__palette-hint" id="paletteHint" aria-label="Open command palette">
+        <kbd>Ctrl</kbd><kbd>K</kbd>
+      </button>
+      <a href="./assets/JosephAlfartosyResume.pdf" target="_blank" class="nav__cta" data-magnetic>Resume</a>
+      <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul class="mobile-menu__list">
+      <li><a href="#about" class="mobile-menu__link"><span>01</span>About</a></li>
+      <li><a href="#research" class="mobile-menu__link"><span>02</span>Research</a></li>
+      <li><a href="#software" class="mobile-menu__link"><span>03</span>Software</a></li>
+      <li><a href="#contact" class="mobile-menu__link"><span>04</span>Contact</a></li>
+      <li><a href="./assets/JosephAlfartosyResume.pdf" target="_blank" class="mobile-menu__link"><span>05</span>Resume</a></li>
+    </ul>
+    <div class="mobile-menu__footer">
+      <a href="https://www.linkedin.com/in/josephalfartosy" target="_blank">LinkedIn</a>
+      <a href="https://github.com/joseph8071" target="_blank">GitHub</a>
+      <a href="mailto:alfartos@ualberta.ca">Email</a>
+    </div>
+  </div>
+
+  <!-- Command palette -->
+  <div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="palette__backdrop" id="paletteBackdrop"></div>
+    <div class="palette__panel">
+      <div class="palette__search">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="paletteInput" placeholder="Type a command or search…" autocomplete="off" spellcheck="false" />
+        <kbd>esc</kbd>
+      </div>
+      <ul class="palette__list" id="paletteList"></ul>
+      <div class="palette__footer">
+        <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> select</span>
+      </div>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+      <div class="hero__content">
+        <p class="hero__eyebrow"><span class="hero__eyebrow-line"></span><span id="greeting">Hi, my name is</span></p>
+        <h1 class="hero__title" id="heroTitle">
+          <span class="hero__title-line"><span class="hero__title-word" data-splitletters>Joseph</span></span>
+          <span class="hero__title-line"><span class="hero__title-word hero__title-word--outline" data-splitletters>Al Fartosy</span></span>
+        </h1>
+        <div class="hero__role">
+          <span class="hero__role-static">I'm drawn to</span>
+          <span class="hero__role-dynamic" id="typewriter"></span>
+          <span class="hero__role-caret"></span>
+        </div>
+        <p class="hero__para">
+          Psychology student and researcher at the University of Alberta.
+          I study how people think, feel, and support each other in
+          distress — and I occasionally build software about it.
+        </p>
+        <div class="hero__actions">
+          <a href="#research" class="btn btn--primary" data-magnetic data-cursor="explore">
+            <span>See my research</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#contact" class="btn btn--ghost" data-magnetic><span>Get in touch</span></a>
+        </div>
+        <div class="hero__socials">
+          <a href="https://www.linkedin.com/in/josephalfartosy" target="_blank" aria-label="LinkedIn" class="hero__social" data-magnetic>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          </a>
+          <a href="https://github.com/joseph8071" target="_blank" aria-label="GitHub" class="hero__social" data-magnetic>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-1.94c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11.04 11.04 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+          </a>
+          <a href="mailto:alfartos@ualberta.ca" aria-label="Email" class="hero__social" data-magnetic>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6L22 7"/></svg>
+          </a>
+        </div>
+      </div>
+      <a href="#about" class="hero__scroll" aria-label="Scroll down">
+        <div class="hero__scroll-mouse"><div class="hero__scroll-wheel"></div></div>
+        <span>scroll</span>
+      </a>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee" aria-hidden="true" id="marquee">
+      <div class="marquee__track" id="marqueeTrack">
+        <span>Psychology</span><i>✦</i><span>Neuroscience</span><i>✦</i><span>Mental Health</span><i>✦</i><span>Memory Models</span><i>✦</i><span>Medicine</span><i>✦</i><span>Research Methods</span><i>✦</i><span>Teaching</span><i>✦</i><span>Empathy</span><i>✦</i><span>Data Analysis</span><i>✦</i><span>Code</span><i>✦</i>
+        <span>Psychology</span><i>✦</i><span>Neuroscience</span><i>✦</i><span>Mental Health</span><i>✦</i><span>Memory Models</span><i>✦</i><span>Medicine</span><i>✦</i><span>Research Methods</span><i>✦</i><span>Teaching</span><i>✦</i><span>Empathy</span><i>✦</i><span>Data Analysis</span><i>✦</i><span>Code</span><i>✦</i>
+      </div>
+    </div>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section about" id="about">
+      <div class="section__header reveal">
+        <span class="section__num">01</span>
+        <h2 class="section__title">About <span class="grad">me</span></h2>
+        <span class="section__rule"></span>
+      </div>
+      <div class="about__grid">
+        <div class="about__text reveal">
+          <p>
+            I'm a <b>psychology major</b> (with a computer science minor) at the
+            <b>University of Alberta</b>, graduating April 2026 — and my long
+            game is <b>medicine</b>. What pulls me in is mental health: emotional
+            regulation, how people respond to distress, and how the right
+            support at the right moment changes everything.
           </p>
-          <div class="social__list">
-            <a
-              href="https://www.linkedin.com/in/josephalfartosy"
-              target="_blank"
-              class="social__link click"
-            >
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a
-              href="https://github.com/joseph8071"
-              target="_blank"
-              class="social__link click"
-            >
-              <i class="fab fa-github"></i>
-            </a>
-            <a href="./assets/Joseph_Alfartosy_Resume_2024.pdf" target="_blank" class="social__link click">
-              <i class="fas fa-file-pdf"></i>
-            </a>
+          <p>
+            Outside the lab, I've been teaching and mentoring youth at
+            <b>Oxford Tutoring</b> since 2022 — a lot of calm conversations,
+            de-escalation, and meeting people where they are. I'm trained in
+            <b>trauma-informed communication</b> and keep my first-aid
+            certifications current, because caring for people is the whole point.
+          </p>
+          <div class="about__stats">
+            <div class="about__stat">
+              <span class="about__stat-num" data-count="95">0</span><span class="about__stat-plus">%</span>
+              <span class="about__stat-label">student pass rate</span>
+            </div>
+            <div class="about__stat">
+              <span class="about__stat-num" data-count="50">0</span><span class="about__stat-plus">%</span>
+              <span class="about__stat-label">avg. grade improvement</span>
+            </div>
+            <div class="about__stat">
+              <span class="about__stat-num" data-count="3">0</span><span class="about__stat-plus">+</span>
+              <span class="about__stat-label">years teaching &amp; mentoring</span>
+            </div>
+          </div>
+          <div class="about__certs">
+            <h3 class="about__certs-title">// certified</h3>
+            <ul class="certs">
+              <li class="cert"><span class="cert__icon">✚</span> Standard First Aid with CPR — Red Cross</li>
+              <li class="cert"><span class="cert__icon">✚</span> Mental Health First Aid</li>
+            </ul>
           </div>
         </div>
-      </header>
-      <a href="#">
-        <button class="mail__btn click" onclick="toggleModal()">
-          <i class="fas fa-envelope"></i>
-        </button>
-      </a>
-      <a href="#projects" class="scroll">
-        <div class="scroll__icon click"></div>
-      </a>
-      <div class="modal">
-        <div class="modal__half modal__about">
-          <h3 class="modal__title modal__title--about">
-            Here's a bit about me
-          </h3>
-          <h4 class="modal__sub-title modal__sub-title--about">Fullstack Software Engineer.</h4>
-          <p class="modal__para">
-            I'm a Canadian
-            <b class="blue">Fullstack software engineer</b> with a strong
-            passion for developing websites with great
-            <b class="blue">user experiences.</b>
-            <br>
-            Every day, I solve <b class="blue">complex</b> engineering challenges and learn from a team of some of the most <b class="blue">skilled</b> and <b class="blue">experienced</b> software engineers. 
-          </p>
-          <div class="modal__languages">
-            <figure class="modal__language">
-              <img class="modal__language--img" src="./assets/my sql.png" alt="">
-              <span class="language__name">SQL</span>
-            </figure>
-            <figure class="modal__language">
-              <img class="modal__language--img" src="https://cdn.iconscout.com/icon/free/png-512/free-typescript-1174965.png?f=webp&w=512" alt="">
-              <span class="language__name">TypeScript</span>
-            </figure>
-            <figure class="modal__language">
-              <img class="modal__language--img" src="https://cdn.iconscout.com/icon/free/png-256/javascript-1-225993.png" alt="">
-              <span class="language__name">JavaScript</span>
-            </figure>
-            <figure class="modal__language">
-              <img class="modal__language--img" src="https://cdn.iconscout.com/icon/free/png-256/react-3-1175109.png" alt="">
-              <span class="language__name">React</span>
-            </figure>
-            <figure class="modal__language">
-              <img class="modal__language--img" src="https://cdn.iconscout.com/icon/free/png-256/c-58-1175247.png" alt="">
-              <span class="language__name">C/C++</span>
-            </figure>
-            <figure class="modal__language">
-              <img class="modal__language--img" src="https://cdn.iconscout.com/icon/free/png-256/python-2-226051.png" alt="">
-              <span class="language__name">Python</span>
-            </figure>
+        <div class="about__skills reveal">
+          <h3 class="about__skills-title">// what I bring</h3>
+          <div class="skills">
+            <span class="skill">Emotional de-escalation</span>
+            <span class="skill">Trauma-informed care</span>
+            <span class="skill">Active listening</span>
+            <span class="skill">Suicide &amp; distress awareness</span>
+            <span class="skill">Research methods</span>
+            <span class="skill">Data analysis</span>
+            <span class="skill">Literature review</span>
+            <span class="skill">Documentation</span>
+            <span class="skill">MATLAB</span>
+            <span class="skill">Python</span>
+            <span class="skill">TypeScript</span>
           </div>
-        </div>
-        <div class="modal__half modal__contact">
-        <i class="fas fa-times modal__exit click" onclick="toggleModal()"></i>
-          <h3 class="modal__title modal__title--contact">
-            Let's have a chat!
-          </h3>
-          <h4 class="modal__sub-title modal__sub-title--contact">
-            I'm currently open to new opportunities.
-          </h4>
-          <form id="contact__form" onsubmit="contact(event)">
-            <div class="form__item">
-              <label class="form__item--label">Name</label>
-              <input class="input" name="user_name" type="text" required> </input>
+          <div class="about__terminal" id="terminal">
+            <div class="about__terminal-bar">
+              <span></span><span></span><span></span>
+              <p>joseph@uofa ~</p>
             </div>
-            <div class="form__item">
-              <label class="form__item--label">Email</label>
-              <input class="input" name="user_email" type="email" required> </input>
-            </div>
-            <div class="form__item">
-              <label class="form__item--label">Message</label>
-              <textarea class="input" name="message" type="text" required> </textarea>
-            </div>
-            <button id="contact__submit" class="form__submit">
-              Send it my way
-            </button>
-          </form>
-          <div class="modal__overlay modal__overlay--loading">
-            <i class="fas fa-spinner"></i>
-          </div>
-          <div class="modal__overlay modal__overlay--success">
-            Thanks for the message! Looking forward to speaking to you soon.
+            <pre class="about__terminal-body"><code id="terminalCode"></code><span class="t-caret">▊</span></pre>
           </div>
         </div>
       </div>
-      <img src="./assets/semi circle.svg" class="shape shape--0">
-      <img src="./assets/circle.svg" class="shape shape--1">
-      <img src="./assets/squiggly.svg" class="shape shape--2">
-      <img src="./assets/circle.svg" class="shape shape--3">
-      <img src="./assets/triangle.svg" class="shape shape--4">
-      <img src="./assets/circle.svg" class="shape shape--5">
-      <img src="./assets/squiggly.svg" class="shape shape--6">
-      <img src="./assets/circle.svg" class="shape shape--7">
-      <img src="./assets/semi circle.svg" class="shape shape--8">
     </section>
-    <section id="projects">
-      <div class="container">
-        <div class="row">
-          <h1 class="section__title">
-            Here are some of my <span class="blue">projects</span>
-          </h1>
-          <ul class="project__list">
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/eventsnapqrAppHomePage.png"
-                  class="project__img"
-                  alt=""
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    EventSnapQR - An event planning application for Android
-                  </h3>
-                  <h4 class="project__description--sub-title">
-                    Java, Firebase, GoogleApi, XML 
-                  </h4>
-                  <p class="project__description--para">
-                    EventSnapQR is an intuitive Android app designed to streamline event planning and management. Whether you're organizing a small gathering or a large event, EventSnapQR simplifies the process with real-time updates, accurate geolocation services, and easy QR code access for attendees. It’s your go-to tool for efficient and seamless event coordination                   </p>
-                  <div class="project__description--links">
-                    <a href="https://github.com/CMPUT301W24T19/EventSnapQR" target="_blank" class="project__description--link">
-                      <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://github.com/CMPUT301W24T19/EventSnapQR" target="_blank" class="project__description--link">
-                      <i class="fas fa-link"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/easepal home page.png"
-                  class="project__img"
-                  alt=""
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    EasePal - A Personal Yoga Teacher to improve Flexibility and Overall Wellness.
-                  </h3>
-                  <h4 class="project__description--sub-title">
-                    Frontend: React, TypeScript, Vite Backend: Express.js Database: MongoDB
-                  </h4>
-                  <p class="project__description--para">
-                    EasePal is a dynamic web application designed to create personalized stretching routines tailored to individual needs. Whether you're dealing with specific muscle pain, seeking to improve your flexibility, or simply looking to enhance your overall wellness, EasePal is here to guide you.                   </p>
-                  <div class="project__description--links">
-                    <a href="https://github.com/joseph8071/EasePal/tree/main/" target="_blank" class="project__description--link">
-                      <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://easepal.vercel.app/" target="_blank" class="project__description--link">
-                      <i class="fas fa-link"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/blinker mockup.png"
-                  class="project__img"
-                  alt=""
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    eLibrary App
-                  </h3>
-                  <h4 class="project__description--sub-title">
-                    React, JavaScript, Html, CSS
-                  </h4>
-                  <p class="project__description--para">
-                    I aim to connect readers all around the world with literature. I believe bookshops are vital information centres that promote culture, curiosity, and a love of reading, and I am dedicated to ensuring their survival and growth. Individuals may buy books from this site online.
-                  </p>
-                  <div class="project__description--links">
-                    <a href="https://e-library-three.vercel.app/" target="_blank" class="project__description--link">
-                      <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://e-library-three.vercel.app/" target="_blank" class="project__description--link">
-                      <i class="fas fa-link"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <!-- <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/react template mockup.jpg"
-                  class="project__img"
-                  alt=""
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                   React Template Platform Mockup
-                  </h3>
-                  <h4 class="project__description--sub-title">
-                    Html, CSS, JavaScript, React
-                  </h4>
-                  <p class="project__description--para">
-                    Modern React UI Templates and Components that are easily adaptable, lightweight, and quick to set up. For a wonderful mobile experience as well as large desktop screens, all components are modular and completely responsive. Brand colours can also be completely customised. Free for both personal and business usage.
-                  </p>
-                  <div class="project__description--links">
-                    <a href="https://github.com/joseph8071/Treact" target="_blank" class="project__description--link">
-                      <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://joseph8071.github.io/Treact/" target="_blank" class="project__description--link">
-                      <i class="fas fa-link"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li> -->
+
+    <!-- ============ RESEARCH ============ -->
+    <section class="section research" id="research">
+      <div class="section__header reveal">
+        <span class="section__num">02</span>
+        <h2 class="section__title">My <span class="grad">research</span></h2>
+        <span class="section__rule"></span>
+      </div>
+
+      <div class="research-list">
+
+        <article class="research-card reveal" data-tilt>
+          <div class="project-card__glow"></div>
+          <div class="research-card__head">
+            <span class="research-card__icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4.1-2.4 5.4-.9 1-1.6 1.9-1.6 3.1V19a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-1.5c0-1.2-.7-2.1-1.6-3.1C6.2 13.1 5 11.4 5 9a7 7 0 0 1 7-7z"/><path d="M9 22h6"/></svg>
+            </span>
+            <div>
+              <h3 class="research-card__title">Social Psychology Research</h3>
+              <p class="research-card__meta">University of Alberta · 2024 — present</p>
+            </div>
+            <span class="research-card__index">/ 01</span>
+          </div>
+          <p class="research-card__desc">
+            Undergraduate research on interpersonal behavior, distress responses,
+            and influence in high-stakes situations. I assist with literature
+            reviews, data analysis, and observation focused on mental health
+            challenges and emotional regulation — and collaborate with faculty
+            and graduate students to present findings on behavioral risk and
+            support systems.
+          </p>
+          <ul class="project-card__tags">
+            <li>Social psychology</li><li>Mental health</li><li>Emotional regulation</li><li>Data analysis</li>
           </ul>
-        </div>
+        </article>
+
+        <article class="research-card reveal" data-tilt>
+          <div class="project-card__glow"></div>
+          <div class="research-card__head">
+            <span class="research-card__icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="12" cy="12" r="2.4"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="19" r="2"/><path d="M6.7 7.2 10.3 10.6M17.3 6.2 13.9 10.3M6.7 16.8 10.3 13.4M17.3 17.8 13.9 13.7"/></svg>
+            </span>
+            <div>
+              <h3 class="research-card__title">Computational Memory Modeling</h3>
+              <p class="research-card__meta">Cognitive psychology · MINERVA 2</p>
+            </div>
+            <span class="research-card__index">/ 02</span>
+          </div>
+          <p class="research-card__desc">
+            How does human memory recognize what it has seen before? I work with
+            <b>MINERVA 2</b>, a classic multiple-trace model of episodic memory —
+            deriving mathematical predictions for recognition performance
+            (signal detection d′) and validating them against Monte Carlo
+            simulations in MATLAB. It's where my psychology and computer
+            science sides meet.
+          </p>
+          <ul class="project-card__tags">
+            <li>Memory</li><li>Cognitive modeling</li><li>Signal detection</li><li>MATLAB</li><li>Simulation</li>
+          </ul>
+        </article>
+
       </div>
     </section>
-    <footer>
-      <div class="container">
-        <div class="row footer__row">
-          <figure>
-            <img src="./assets/JAlogo.svg" class="footer__logo--img" alt="" />
-          </figure>
-          <div class="footer__social--list">
-            <a
-              href="#"
-              class="footer__social--link link__hover-effect link__hover-effect--white"
-            >
-              Github
-            </a>
-            <a
-              href="#"
-              class="footer__social--link link__hover-effect link__hover-effect--white"
-            >
-              Linkedin
-            </a>
-            <a
-            onclick="toggleModal()"
-              href="#"
-              class="footer__social--link link__hover-effect link__hover-effect--white"
-            >
-              Contact
-            </a>
-            <a
-              href="./assets/Joseph_Alfartosy_Resume_2024.pdf"
-              class="footer__social--link link__hover-effect link__hover-effect--white"
-            >
-              Resume
-            </a>
-          </div>
-          <div class="footer__copyright">Copyright ⓒ 2022 Joseph Alfartosy</div>
-        </div>
-      </div>
-    </footer>
-  </body>
-</html>
 
+    <!-- ============ SOFTWARE ============ -->
+    <section class="section projects" id="software">
+      <div class="section__header reveal">
+        <span class="section__num">03</span>
+        <h2 class="section__title">Software, <span class="grad">on the side</span></h2>
+        <span class="section__rule"></span>
+      </div>
+      <p class="section__lede reveal">
+        The CS minor isn't just for show — when an idea won't leave me alone, I build it.
+      </p>
+
+      <div class="project-list">
+
+        <article class="project-card reveal" data-tilt>
+          <div class="project-card__glow"></div>
+          <div class="project-card__glare"></div>
+          <div class="project-card__media">
+            <img src="./assets/eventsnapqrAppHomePage.png" alt="EventSnapQR app home page" loading="lazy" data-parallax />
+          </div>
+          <div class="project-card__body">
+            <span class="project-card__index">/ 01</span>
+            <h3 class="project-card__title">EventSnapQR</h3>
+            <p class="project-card__desc">
+              An Android app that streamlines event planning — real-time updates,
+              geolocation, and instant QR-code access for attendees.
+            </p>
+            <ul class="project-card__tags">
+              <li>Java</li><li>Firebase</li><li>Android</li>
+            </ul>
+            <div class="project-card__links">
+              <a href="https://github.com/CMPUT301W24T19/EventSnapQR" target="_blank" data-magnetic>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-1.94c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11.04 11.04 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                <span>Code</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card project-card--flip reveal" data-tilt>
+          <div class="project-card__glow"></div>
+          <div class="project-card__glare"></div>
+          <div class="project-card__media">
+            <img src="./assets/easepal home page.png" alt="EasePal home page" loading="lazy" data-parallax />
+          </div>
+          <div class="project-card__body">
+            <span class="project-card__index">/ 02</span>
+            <h3 class="project-card__title">EasePal</h3>
+            <p class="project-card__desc">
+              A personal stretching coach on the web — personalized routines for
+              muscle pain, flexibility, and overall wellness. Health and code, together.
+            </p>
+            <ul class="project-card__tags">
+              <li>React</li><li>TypeScript</li><li>Express</li><li>MongoDB</li>
+            </ul>
+            <div class="project-card__links">
+              <a href="https://github.com/joseph8071/EasePal/tree/main/" target="_blank" data-magnetic>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-1.94c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11.04 11.04 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                <span>Code</span>
+              </a>
+              <a href="https://easepal.vercel.app/" target="_blank" data-magnetic>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                <span>Live</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <h3 class="mini-title reveal">// smaller builds &amp; experiments</h3>
+      <div class="mini-grid">
+
+        <a class="mini-card reveal" href="https://github.com/joseph8071/morphace_backend" target="_blank" data-cursor="github">
+          <div class="mini-card__top">
+            <span class="mini-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2a9 9 0 0 0-9 9c0 4 2.5 7.5 6 8.7V22h6v-2.3c3.5-1.2 6-4.7 6-8.7a9 9 0 0 0-9-9z"/><circle cx="9" cy="10" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.2" fill="currentColor" stroke="none"/></svg>
+            </span>
+            <svg class="mini-card__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </div>
+          <h4 class="mini-card__title">Morphace Backend</h4>
+          <p class="mini-card__desc">API powering a skin-health metrics platform — user data, models, and routes for a smart face-mask product.</p>
+          <ul class="mini-card__tags"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li></ul>
+        </a>
+
+        <a class="mini-card reveal" href="https://github.com/joseph8071/rock-paper-scissors" target="_blank" data-cursor="github">
+          <div class="mini-card__top">
+            <span class="mini-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M17.5 9.5h.01"/></svg>
+            </span>
+            <svg class="mini-card__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </div>
+          <h4 class="mini-card__title">Rock-Paper-Scissors ML</h4>
+          <p class="mini-card__desc">Play against your webcam — a neural network reads your hand gesture in real time and fights back.</p>
+          <ul class="mini-card__tags"><li>Python</li><li>TensorFlow</li><li>Computer vision</li></ul>
+        </a>
+
+        <a class="mini-card reveal" href="https://github.com/joseph8071/buyer-folio" target="_blank" data-cursor="github">
+          <div class="mini-card__top">
+            <span class="mini-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+            </span>
+            <svg class="mini-card__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </div>
+          <h4 class="mini-card__title">Buyer Folio</h4>
+          <p class="mini-card__desc">A platform making homeownership more accessible through co-buying partnerships and shared resources.</p>
+          <ul class="mini-card__tags"><li>React</li><li>Framer Motion</li></ul>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section contact" id="contact">
+      <div class="section__header reveal">
+        <span class="section__num">04</span>
+        <h2 class="section__title">Let's <span class="grad">talk</span></h2>
+        <span class="section__rule"></span>
+      </div>
+      <div class="contact__grid">
+        <div class="contact__info reveal">
+          <h3 class="contact__headline">Research, mentorship, or just curious?<br /><span class="grad">My inbox is always open.</span></h3>
+          <p class="contact__para">
+            Whether it's about psychology, research opportunities, tutoring,
+            or something I've built — I'd love to hear from you.
+          </p>
+          <button class="contact__email" id="copyEmail" data-magnetic data-cursor="copy">
+            alfartos@ualberta.ca
+            <span class="contact__email-copied" id="emailCopied">copied ✓</span>
+          </button>
+          <div class="contact__meta">
+            <div class="contact__meta-item">
+              <span class="contact__meta-label">local time</span>
+              <span class="contact__meta-value" id="localTime">--:--</span>
+            </div>
+            <div class="contact__meta-item">
+              <span class="contact__meta-label">based in</span>
+              <span class="contact__meta-value">Edmonton, AB 🇨🇦</span>
+            </div>
+            <div class="contact__meta-item">
+              <span class="contact__meta-label">status</span>
+              <span class="contact__meta-value"><span class="pulse-dot"></span> studying</span>
+            </div>
+          </div>
+        </div>
+        <form id="contact__form" class="contact__form reveal">
+          <div class="field">
+            <input class="field__input" name="user_name" id="f-name" type="text" placeholder=" " required />
+            <label class="field__label" for="f-name">Name</label>
+          </div>
+          <div class="field">
+            <input class="field__input" name="user_email" id="f-email" type="email" placeholder=" " required />
+            <label class="field__label" for="f-email">Email</label>
+          </div>
+          <div class="field">
+            <textarea class="field__input field__input--area" name="message" id="f-msg" placeholder=" " required></textarea>
+            <label class="field__label" for="f-msg">Message</label>
+          </div>
+          <button type="submit" class="btn btn--primary contact__submit" data-magnetic>
+            <span class="contact__submit-label">Send it my way</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+          <p class="contact__status" id="contactStatus" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ BIG CTA ============ -->
+    <section class="mega-cta">
+      <a href="#contact" class="mega-cta__link" data-cursor="say hi">
+        <span class="mega-cta__line" data-splitletters>MIND, MEDICINE</span>
+        <span class="mega-cta__line mega-cta__line--outline" data-splitletters>& A LITTLE CODE</span>
+      </a>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <a href="#top" class="footer__logo" data-magnetic>JA<span class="nav__logo-dot">.</span></a>
+      <p class="footer__note">Designed &amp; built by Joseph Al Fartosy — ⓒ <span id="year"></span> · <button class="footer__secret" id="secretBtn" title="???">press ↑↑↓↓←→←→BA</button></p>
+      <div class="footer__links">
+        <a href="https://www.linkedin.com/in/josephalfartosy" target="_blank">LinkedIn</a>
+        <a href="https://github.com/joseph8071" target="_blank">GitHub</a>
+        <a href="./assets/JosephAlfartosyResume.pdf" target="_blank">Resume</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="index.js"></script>
+</body>
+</html>
